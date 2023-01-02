@@ -56,11 +56,11 @@ def start():
     # URL을 복사할 때 맨뒤에 "...%26search.page=3" 부분의 숫자(페이지번호)는 제거하고 입력합니다.
     # 예시는 네이버 카페 "디젤매니아"에서 "청바지"라는 키워드로 검색된 게시물 URL 입니다.
     # 게시물 열람이 가능한 계정으로 카페에 접근해야 수집이 가능합니다.
-    URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchdate=all&search.searchBy=1&search.query=%C4%AB%B5%E5&search.defaultValue=1&search.sortBy=date&userDisplay=15&search.media=0&search.option=0&search.menuid=464&search.page="
+    URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchdate=all&search.searchBy=1&search.defaultValue=1&search.sortBy=date&userDisplay=15&search.media=0&search.option=0&search.menuid=464&search.page="
 
     # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.
     # 최대 페이지 수를 넘지 않도록 주의합니다.
-    page_limit = 1
+    page_limit = 100
 
     # FOR 문을 활용해 페이지 번호를 반복합니다.
     for page_num in range(1, page_limit + 1):
