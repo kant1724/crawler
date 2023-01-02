@@ -120,7 +120,7 @@ def start():
             title = driver.find_element(By.CLASS_NAME, "title_text").text.strip()
             contents = driver.find_element(By.CLASS_NAME, "article_viewer").text.replace("\n", " ")
             # 파일에 수집한 게시물 내용을 기록합니다.
-            f.write("POSTING" + title + "\t" + contents + "\n")
+            f.write("POSTING" + "\t" + title + "\t" + contents + "\n")
 
             # 댓글을 모두 불러옵니다.
             reply_list = driver.find_elements(By.CLASS_NAME, "comment_box")
