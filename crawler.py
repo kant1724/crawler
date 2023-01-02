@@ -14,6 +14,7 @@ class layout(QMainWindow):
 
     def window(self):
         cm.add_menu(self)
+        self.btn_start_crawling = cm.btn_start_crawling(self)
         self.setGeometry(300, 300, 800, 450)
         self.show()
 
