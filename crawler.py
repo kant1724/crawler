@@ -4,13 +4,16 @@ from PyQt5.QtWidgets import QSizeGrip, QVBoxLayout, QWidget, QApplication, QGrid
 from PyQt5.QtCore import Qt, QSettings
 #from gui_control import control
 from component import component_manager as cm
-#from engine import event_processor as ep
+from event import event_processor as ep
 #from engine import execution
 
 class layout(QMainWindow):
     def __init__(self):
         super().__init__()
         self.window()
+
+    def on_click_btn_start_crawling(self):
+        ep.on_click_btn_start_crawling(self)
 
     def window(self):
         cm.add_menu(self)

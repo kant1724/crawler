@@ -12,4 +12,6 @@ def btn_start_crawling(obj):
     btn = QPushButton(obj)
     btn.setText("START CRAWLING")
     btn.setGeometry(cp.BTN_START_CRAWLING_X_START, cp.BTN_START_CRAWLING_Y_START, cp.BTN_START_CRAWLING_WIDTH, cp.BTN_START_CRAWLING_HEIGHT)
+    btn.clicked.connect(obj.on_click_btn_start_crawling)
+
     return btn
