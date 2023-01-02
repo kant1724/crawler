@@ -46,17 +46,6 @@ def start():
 
     time.sleep(30)
 
-    '''
-    ID='sonseungbum'
-    PW='kant0514'
-
-    driver.find_element(By.NAME, "id").send_keys(ID)
-    time.sleep(2)
-    driver.find_element(By.NAME, "pw").send_keys(PW)
-    time.sleep(2)
-
-    driver.find_element(By.NAME, "frmNIDLogin").submit()
-    '''
     # 수집할 카페 게시물의 링크주소를 저장할 리스트를 생성합니다.
     post_list = []
 
