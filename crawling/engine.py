@@ -3,6 +3,7 @@ import selenium
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from urllib import parse
 
 # selenium을 활용해 브라우저를 직접 띄우는 경우, 실제 웹서핑을 할때처럼 로딩시간이 필요합니다.
 # 로딩시간 동안 대기하도록 코드를 구성하기위해 time 패키지를 import 합니다.
@@ -56,11 +57,18 @@ def start():
     # URL을 복사할 때 맨뒤에 "...%26search.page=3" 부분의 숫자(페이지번호)는 제거하고 입력합니다.
     # 예시는 네이버 카페 "디젤매니아"에서 "청바지"라는 키워드로 검색된 게시물 URL 입니다.
     # 게시물 열람이 가능한 계정으로 카페에 접근해야 수집이 가능합니다.
-    URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchdate=2022-01-052023-01-05&search.searchBy=0&search.query=%B4%EB%C3%E2&search.defaultValue=1&search.includeAll=&search.exclude=&search.include=&search.exact=&search.sortBy=date&userDisplay=15&search.media=0&search.option=0&search.page="
+    URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchBy=0&search.defaultValue=1&search.includeAll=&search.exclude=&search.include=&search.exact=&search.sortBy=date&userDisplay=15&search.media=0&search.option=0"
+
+    from_date = '2021-01-05'
+    to_date = '2021-01-05'
+
+    URL += "&search.searchdate=" + from_date + to_date
+    URL += "&" + parse.urlencode([('search.query', '대출')], encoding='EUC-KR', doseq=True)
+    URL += "&search.page="
 
     # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.
     # 최대 페이지 수를 넘지 않도록 주의합니다.
-    page_limit = 100
+    page_limit = 4
 
     # FOR 문을 활용해 페이지 번호를 반복합니다.
     for page_num in range(1, page_limit + 1):
