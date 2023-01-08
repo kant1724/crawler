@@ -4,4 +4,8 @@ from PyQt5.QtGui import *
 from crawling import engine
 
 def on_click_btn_start_crawling(obj):
-    engine.start()
+    start_date = obj.edt_start_date.text()
+    end_date = obj.edt_end_date.text()
+    keyword = obj.edt_keyword.text()
+
+    engine.start(start_date, end_date, keyword)

@@ -9,7 +9,7 @@ from urllib import parse
 # 로딩시간 동안 대기하도록 코드를 구성하기위해 time 패키지를 import 합니다.
 import time
 
-def start():
+def start(start_date, end_date, keyword):
     # Python 코드를 통해 웹페이지에 정보를 요청하기 위해 BeautifulSoup, urllib 패키지를 import 합니다.
     # from bs4 import BeautifulSoup
     # import requests
@@ -59,11 +59,8 @@ def start():
     # 게시물 열람이 가능한 계정으로 카페에 접근해야 수집이 가능합니다.
     URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchBy=0&search.defaultValue=1&search.includeAll=&search.exclude=&search.include=&search.exact=&search.sortBy=date&userDisplay=15&search.media=0&search.option=0"
 
-    from_date = '2021-01-05'
-    to_date = '2021-01-05'
-
-    URL += "&search.searchdate=" + from_date + to_date
-    URL += "&" + parse.urlencode([('search.query', '대출')], encoding='EUC-KR', doseq=True)
+    URL += "&search.searchdate=" + start_date + end_date
+    URL += "&" + parse.urlencode([('search.query', keyword)], encoding='EUC-KR', doseq=True)
     URL += "&search.page="
 
     # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.

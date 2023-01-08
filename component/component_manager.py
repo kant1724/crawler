@@ -15,3 +15,21 @@ def btn_start_crawling(obj):
     btn.clicked.connect(obj.on_click_btn_start_crawling)
 
     return btn
+
+def edt_start_date(obj):
+    textbox = QLineEdit(obj)
+    textbox.setText('2023-01-01')
+    textbox.setGeometry(cp.EDT_START_DATE_X_START, cp.EDT_START_DATE_Y_START, cp.EDT_START_DATE_WIDTH, cp.EDT_START_DATE_HEIGHT)
+    return textbox
+
+def edt_end_date(obj):
+    textbox = QLineEdit(obj)
+    textbox.setText('2023-01-10')
+    textbox.setGeometry(cp.EDT_END_DATE_X_START, cp.EDT_END_DATE_Y_START, cp.EDT_END_DATE_WIDTH, cp.EDT_END_DATE_HEIGHT)
+    return textbox
+
+def edt_keyword(obj):
+    textbox = QLineEdit(obj)
+    textbox.setText('대출')
+    textbox.setGeometry(cp.EDT_KEYWORD_X_START, cp.EDT_KEYWORD_Y_START, cp.EDT_KEYWORD_WIDTH, cp.EDT_KEYWORD_HEIGHT)
+    return textbox

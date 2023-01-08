@@ -17,7 +17,13 @@ class layout(QMainWindow):
 
     def window(self):
         cm.add_menu(self)
+
         self.btn_start_crawling = cm.btn_start_crawling(self)
+
+        self.edt_start_date = cm.edt_start_date(self)
+        self.edt_end_date = cm.edt_end_date(self)
+        self.edt_keyword = cm.edt_keyword(self)
+
         self.setGeometry(300, 300, 800, 450)
         self.show()
 
