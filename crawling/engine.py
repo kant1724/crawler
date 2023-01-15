@@ -65,7 +65,7 @@ def start(start_date, end_date, keyword):
 
     # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.
     # 최대 페이지 수를 넘지 않도록 주의합니다.
-    page_limit = 4
+    page_limit = 100
 
     # FOR 문을 활용해 페이지 번호를 반복합니다.
     for page_num in range(1, page_limit + 1):
@@ -78,6 +78,10 @@ def start(start_date, end_date, keyword):
 
         # 게시물 태그를 모두 불러옵니다.
         elem = driver.find_elements(By.CLASS_NAME, "article")
+
+        if len(elem) == 0:
+            break
+
         for e in elem:
             # 웹페이지의 하이퍼링크 URL은 항상 href 속성에 존재합니다.
             # href 속성에 저장된 URL을 불러와 post_list에 추가합니다.
