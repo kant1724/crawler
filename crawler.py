@@ -24,7 +24,7 @@ class layout(QMainWindow):
         self.edt_end_date = cm.edt_end_date(self)
         self.edt_keyword = cm.edt_keyword(self)
 
-        self.setGeometry(300, 300, 800, 450)
+        self.setGeometry(600, 300, 500, 370)
         self.show()
 
 if __name__ == '__main__':
