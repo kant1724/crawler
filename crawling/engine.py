@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from urllib import parse
+import datetime as dt
+from datetime import timedelta
 
 # selenium을 활용해 브라우저를 직접 띄우는 경우, 실제 웹서핑을 할때처럼 로딩시간이 필요합니다.
 # 로딩시간 동안 대기하도록 코드를 구성하기위해 time 패키지를 import 합니다.
@@ -50,60 +52,73 @@ def start(start_date, end_date, keyword):
     # 수집할 카페 게시물의 링크주소를 저장할 리스트를 생성합니다.
     post_list = []
 
-    # 브라우저에서 직접 내가 수집할 카페에 접속합니다.
-    # 카페 검색기능을 활용해 수집하고 싶은 내용을 검색합니다.
-    # 키워드, 기간, 정렬기준 등을 지정해 원하는 검색결과를 화면에 띄웁니다.
-    # 검색 후 게시물 리스트가 포함된 "진짜 URL"을 찾아냅니다.
-    # URL을 복사할 때 맨뒤에 "...%26search.page=3" 부분의 숫자(페이지번호)는 제거하고 입력합니다.
-    # 예시는 네이버 카페 "디젤매니아"에서 "청바지"라는 키워드로 검색된 게시물 URL 입니다.
-    # 게시물 열람이 가능한 계정으로 카페에 접근해야 수집이 가능합니다.
-    URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchBy=0&search.defaultValue=1&search.includeAll=&search.exclude=&search.include=&search.exact=&search.sortBy=date&userDisplay=15&search.media=0&search.option=0"
+    date_arr = []
 
-    URL += "&search.searchdate=" + start_date + end_date
-    URL += "&" + parse.urlencode([('search.query', keyword)], encoding='EUC-KR', doseq=True)
-    URL += "&search.page="
+    cur_dt = dt.datetime.strptime(start_date, '%Y-%m-%d')
+    end_dt = dt.datetime.strptime(end_date, '%Y-%m-%d')
 
-    # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.
-    # 최대 페이지 수를 넘지 않도록 주의합니다.
-    page_limit = 100
+    while cur_dt <= end_dt:
+        date_arr.append([dt.datetime.strftime(cur_dt, '%Y-%m-%d'), dt.datetime.strftime(cur_dt + timedelta(days=6), '%Y-%m-%d')])
+        cur_dt = cur_dt + timedelta(days=7)
 
-    # FOR 문을 활용해 페이지 번호를 반복합니다.
-    for page_num in range(1, page_limit + 1):
-        # 검색결과 페이지로 이동합니다.
-        driver.get(URL + str(page_num))
-        # 페이지에서 게시물 리스트가 포함된 프레임으로 이동합니다.
-        # 21.10.16 수정
-        # driver.switch_to_frame(driver.find_element(By.NAME, "cafe_main"))
-        driver.switch_to.frame(driver.find_element(By.NAME, "cafe_main"))
+    date_arr[-1][1] = dt.datetime.strftime(end_dt, '%Y-%m-%d')
 
-        # 게시물 태그를 모두 불러옵니다.
-        elem = driver.find_elements(By.CLASS_NAME, "article")
+    for i in range(len(date_arr)):
+        from_date = date_arr[i][0]
+        to_date = date_arr[i][1]
+        # 브라우저에서 직접 내가 수집할 카페에 접속합니다.
+        # 카페 검색기능을 활용해 수집하고 싶은 내용을 검색합니다.
+        # 키워드, 기간, 정렬기준 등을 지정해 원하는 검색결과를 화면에 띄웁니다.
+        # 검색 후 게시물 리스트가 포함된 "진짜 URL"을 찾아냅니다.
+        # URL을 복사할 때 맨뒤에 "...%26search.page=3" 부분의 숫자(페이지번호)는 제거하고 입력합니다.
+        # 예시는 네이버 카페 "디젤매니아"에서 "청바지"라는 키워드로 검색된 게시물 URL 입니다.
+        # 게시물 열람이 가능한 계정으로 카페에 접근해야 수집이 가능합니다.
+        URL = "https://cafe.naver.com/ArticleSearchList.nhn?search.clubid=23611966&search.searchBy=0&search.defaultValue=1&search.includeAll=&search.exclude=&search.include=&search.exact=&search.sortBy=date&userDisplay=15&search.media=0&search.option=0"
 
-        if len(elem) == 0:
-            break
+        URL += "&search.searchdate=" + from_date + to_date
+        URL += "&" + parse.urlencode([('search.query', keyword)], encoding='EUC-KR', doseq=True)
+        URL += "&search.page="
 
-        for e in elem:
-            # 웹페이지의 하이퍼링크 URL은 항상 href 속성에 존재합니다.
-            # href 속성에 저장된 URL을 불러와 post_list에 추가합니다.
-            post_list.append(e.get_attribute("href"))
-        # 아래 주석부분은 위 25~29번째 라인과 동일한 코드입니다.
-        # 혹시 post_list에 URL이 저장되지 않는 경우 아래처럼 태그의 Class 속성을 "article"에서 "aaa"로 변경해줍니다.
-        '''
-        elem = driver.find_elements(By.CLASS_NAME, "aaa")
-        for e in elem:
-            post_list.append(e.find_element(By.TAG_NAME, "a").get_attribute("href"))
-        '''
-        # 페이지의 기본 프레임으로 이동합니다.
-        driver.switch_to.default_content()
-        time.sleep(2)
+        # 몇 페이지 까지 게시물의 URL을 수집할지 지정합니다.
+        # 최대 페이지 수를 넘지 않도록 주의합니다.
+        page_limit = 100
 
-    # 총 몇개의 게시물 URL이 저장되었는지 확인합니다.
-    print("수집된 게시물 URL 개수 :", len(post_list))
+        # FOR 문을 활용해 페이지 번호를 반복합니다.
+        for page_num in range(1, page_limit + 1):
+            # 검색결과 페이지로 이동합니다.
+            driver.get(URL + str(page_num))
+            # 페이지에서 게시물 리스트가 포함된 프레임으로 이동합니다.
+            # 21.10.16 수정
+            # driver.switch_to_frame(driver.find_element(By.NAME, "cafe_main"))
+            driver.switch_to.frame(driver.find_element(By.NAME, "cafe_main"))
+
+            # 게시물 태그를 모두 불러옵니다.
+            elem = driver.find_elements(By.CLASS_NAME, "article")
+
+            if len(elem) == 0:
+                break
+
+            for e in elem:
+                # 웹페이지의 하이퍼링크 URL은 항상 href 속성에 존재합니다.
+                # href 속성에 저장된 URL을 불러와 post_list에 추가합니다.
+                post_list.append(e.get_attribute("href"))
+            # 아래 주석부분은 위 25~29번째 라인과 동일한 코드입니다.
+            # 혹시 post_list에 URL이 저장되지 않는 경우 아래처럼 태그의 Class 속성을 "article"에서 "aaa"로 변경해줍니다.
+            '''
+            elem = driver.find_elements(By.CLASS_NAME, "aaa")
+            for e in elem:
+                post_list.append(e.find_element(By.TAG_NAME, "a").get_attribute("href"))
+            '''
+            # 페이지의 기본 프레임으로 이동합니다.
+            driver.switch_to.default_content()
+            time.sleep(2)
+
+        # 총 몇개의 게시물 URL이 저장되었는지 확인합니다.
+        print("수집된 게시물 URL 개수 :", len(post_list))
 
     from timeit import default_timer as timer
 
     s = timer()
-
 
     # 게시물 URL이 저장된 post_list에서 몇번째 부터(start) 몇번째 까지(end) URL에 접근할지 지정합니다.
     start = 0
