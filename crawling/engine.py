@@ -49,9 +49,6 @@ def start(start_date, end_date, keyword):
 
     time.sleep(30)
 
-    # 수집할 카페 게시물의 링크주소를 저장할 리스트를 생성합니다.
-    post_list = []
-
     date_arr = []
 
     cur_dt = dt.datetime.strptime(start_date, '%Y-%m-%d')
@@ -62,6 +59,9 @@ def start(start_date, end_date, keyword):
         cur_dt = cur_dt + timedelta(days=7)
 
     date_arr[-1][1] = dt.datetime.strftime(end_dt, '%Y-%m-%d')
+
+    # 수집할 카페 게시물의 링크주소를 저장할 리스트를 생성합니다.
+    post_list = []
 
     for i in range(len(date_arr)):
         from_date = date_arr[i][0]
@@ -113,8 +113,8 @@ def start(start_date, end_date, keyword):
             driver.switch_to.default_content()
             time.sleep(2)
 
-        # 총 몇개의 게시물 URL이 저장되었는지 확인합니다.
-        print("수집된 게시물 URL 개수 :", len(post_list))
+    # 총 몇개의 게시물 URL이 저장되었는지 확인합니다.
+    print("수집된 게시물 URL 개수 :", len(post_list))
 
     from timeit import default_timer as timer
 
